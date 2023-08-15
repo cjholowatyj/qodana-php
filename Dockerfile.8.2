@@ -33,6 +33,15 @@ RUN apt-get update && \
 COPY rootfs/ /
 COPY --from=composer/composer:2-bin /composer /usr/bin/composer
 
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions ext-curl && \
+    install-php-extensions ext-intl && \
+    install-php-extensions ext-pcntl && \
+    install-php-extensions ext-pdo && \
+    install-php-extensions ext-posix && \
+    install-php-extensions ext-redis
+
 WORKDIR /data/project
 
 ENTRYPOINT ["/entrypoint.sh"]
